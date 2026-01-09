@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}{% if is_edit %}タスクを編集{% else %}新規タスク{% endif %} - MemoScribe{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'tasks:list' %}">タスク</a></li>
+            <li class="breadcrumb-item active">{% if is_edit %}編集{% else %}新規作成{% endif %}</li>
+        </ol>
+    </nav>
+
+    <div class="card">
+        <div class="card-header bg-white">
+            <h2 class="mb-0">{% if is_edit %}タスクを編集{% else %}新規タスク{% endif %}</h2>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label for="id_title" class="form-label">タスク名</label>
+                    {{ form.title }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_description" class="form-label">説明（任意）</label>
+                    {{ form.description }}
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="id_due_at" class="form-label">期限（任意）</label>
+                        {{ form.due_at }}
+                    </div>
+                    <div class="col-md-4">
+                        <label for="id_priority" class="form-label">優先度</label>
+                        {{ form.priority }}
+                    </div>
+                    <div class="col-md-4">
+                        <label for="id_status" class="form-label">状態</label>
+                        {{ form.status }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="tags_input" class="form-label">タグ（カンマ区切り）</label>
+                    <input type="text" class="form-control" id="tags_input" name="tags_input"
+                           value="{% if task %}{{ task.get_tags_display }}{% endif %}"
+                           placeholder="仕事, プロジェクト, 重要">
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-lg"></i> 保存
+                    </button>
+                    <a href="{% url 'tasks:list' %}" class="btn btn-outline-secondary">キャンセル</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}{{ document.title }} - MemoScribe{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'documents:list' %}">文書</a></li>
+            <li class="breadcrumb-item active">{{ document.title }}</li>
+        </ol>
+    </nav>
+
+    <div class="card mb-4">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <h2 class="mb-0">{{ document.title }}</h2>
+            <div>
+                <a href="{{ document.file.url }}" class="btn btn-outline-primary btn-sm" download>
+                    <i class="bi bi-download"></i> ダウンロード
+                </a>
+                <a href="{% url 'documents:delete' document.pk %}" class="btn btn-outline-danger btn-sm">
+                    <i class="bi bi-trash"></i> 削除
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-auto">
+                    <span class="badge bg-secondary">{{ document.file_type|upper }}</span>
+                </div>
+                <div class="col-auto">
+                    {% if document.status == 'completed' %}
+                    <span class="badge bg-success">処理完了</span>
+                    {% elif document.status == 'processing' %}
+                    <span class="badge bg-warning">処理中</span>
+                    {% elif document.status == 'failed' %}
+                    <span class="badge bg-danger">失敗: {{ document.error_message }}</span>
+                    {% else %}
+                    <span class="badge bg-secondary">待機中</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if document.summary %}
+            <h4>要約</h4>
+            <p class="lead">{{ document.summary }}</p>
+            {% endif %}
+
+            {% if document.extracted_text %}
+            <h4>抽出テキスト</h4>
+            <div class="bg-light p-3 rounded" style="max-height: 400px; overflow-y: auto; white-space: pre-wrap;">{{ document.extracted_text }}</div>
+            {% endif %}
+        </div>
+        <div class="card-footer bg-white text-muted small">
+            アップロード: {{ document.created_at|date:"Y/n/j H:i" }}
+        </div>
+    </div>
+
+    {% if chunks %}
+    <div class="card">
+        <div class="card-header bg-white">
+            <h4 class="mb-0">チャンク ({{ chunks|length }}個)</h4>
+        </div>
+        <div class="accordion" id="chunksAccordion">
+            {% for chunk in chunks %}
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#chunk{{ chunk.chunk_index }}">
+                        チャンク {{ chunk.chunk_index|add:1 }}
+                    </button>
+                </h2>
+                <div id="chunk{{ chunk.chunk_index }}" class="accordion-collapse collapse"
+                     data-bs-parent="#chunksAccordion">
+                    <div class="accordion-body" style="white-space: pre-wrap;">{{ chunk.content }}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

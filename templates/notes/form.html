@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}{% if is_edit %}メモを編集{% else %}新規メモ{% endif %} - MemoScribe{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'notes:list' %}">メモ</a></li>
+            <li class="breadcrumb-item active">{% if is_edit %}編集{% else %}新規作成{% endif %}</li>
+        </ol>
+    </nav>
+
+    <div class="card">
+        <div class="card-header bg-white">
+            <h2 class="mb-0">{% if is_edit %}メモを編集{% else %}新規メモ{% endif %}</h2>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label for="id_title" class="form-label">タイトル</label>
+                    {{ form.title }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_body" class="form-label">本文（Markdown対応）</label>
+                    {{ form.body }}
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="tags_input" class="form-label">タグ（カンマ区切り）</label>
+                        <input type="text" class="form-control" id="tags_input" name="tags_input"
+                               value="{% if note %}{{ note.get_tags_display }}{% endif %}"
+                               placeholder="仕事, アイデア, 重要">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="id_importance" class="form-label">重要度</label>
+                        {{ form.importance }}
+                    </div>
+                    <div class="col-md-4">
+                        <label for="id_visibility" class="form-label">公開範囲</label>
+                        {{ form.visibility }}
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-lg"></i> 保存
+                    </button>
+                    <a href="{% url 'notes:list' %}" class="btn btn-outline-secondary">キャンセル</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

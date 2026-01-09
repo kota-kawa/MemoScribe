@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}{% if is_edit %}ログを編集{% else %}新規ログ{% endif %} - MemoScribe{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'logs:list' %}">日常ログ</a></li>
+            <li class="breadcrumb-item active">{% if is_edit %}編集{% else %}新規作成{% endif %}</li>
+        </ol>
+    </nav>
+
+    <div class="card">
+        <div class="card-header bg-white">
+            <h2 class="mb-0">{% if is_edit %}ログを編集{% else %}今日のログ{% endif %}</h2>
+        </div>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="id_date" class="form-label">日付</label>
+                        {{ form.date }}
+                    </div>
+                    <div class="col-md-6">
+                        <label for="id_mood" class="form-label">気分</label>
+                        {{ form.mood }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_raw_text" class="form-label">内容</label>
+                    {{ form.raw_text }}
+                    <small class="text-muted">今日の出来事、感じたこと、学んだことなどを自由に記録してください。</small>
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_attachment" class="form-label">添付ファイル（任意）</label>
+                    {{ form.attachment }}
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-lg"></i> 保存
+                    </button>
+                    <a href="{% url 'logs:list' %}" class="btn btn-outline-secondary">キャンセル</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

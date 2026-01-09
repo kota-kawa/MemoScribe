@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}ダイジェスト - MemoScribe{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'logs:list' %}">日常ログ</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'logs:detail' log.pk %}">{{ log.date|date:"Y/n/j" }}</a></li>
+            <li class="breadcrumb-item active">ダイジェスト</li>
+        </ol>
+    </nav>
+
+    <div class="card">
+        <div class="card-header bg-white">
+            <h2 class="mb-0"><i class="bi bi-lightbulb text-warning"></i> {{ log.date|date:"Y年n月j日" }}のダイジェスト</h2>
+        </div>
+        <div class="card-body">
+            <h4>要約</h4>
+            <p class="lead">{{ digest.summary }}</p>
+
+            {% if digest.topics %}
+            <h4>トピック</h4>
+            <p>
+                {% for topic in digest.topics %}
+                <span class="badge bg-primary fs-6 me-2">{{ topic }}</span>
+                {% endfor %}
+            </p>
+            {% endif %}
+
+            {% if digest.tags %}
+            <h4>タグ</h4>
+            <p>
+                {% for tag in digest.tags %}
+                <span class="badge badge-tag fs-6 me-2">{{ tag }}</span>
+                {% endfor %}
+            </p>
+            {% endif %}
+
+            {% if digest.actions %}
+            <h4>アクション候補</h4>
+            <ul class="list-group">
+                {% for action in digest.actions %}
+                <li class="list-group-item">
+                    <i class="bi bi-arrow-right-circle text-primary"></i> {{ action }}
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        <div class="card-footer bg-white text-muted small">
+            生成日時: {{ digest.created_at|date:"Y/n/j H:i" }}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}タスク一覧 - MemoScribe{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>タスク</h1>
+        <a href="{% url 'tasks:create' %}" class="btn btn-primary">
+            <i class="bi bi-plus-lg"></i> 新規作成
+        </a>
+    </div>
+
+    <div class="mb-4">
+        <div class="btn-group" role="group">
+            <a href="{% url 'tasks:list' %}" class="btn {% if not selected_status %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                すべて
+            </a>
+            <a href="{% url 'tasks:list' %}?status=todo" class="btn {% if selected_status == 'todo' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                未着手
+            </a>
+            <a href="{% url 'tasks:list' %}?status=doing" class="btn {% if selected_status == 'doing' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                進行中
+            </a>
+            <a href="{% url 'tasks:list' %}?status=done" class="btn {% if selected_status == 'done' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                完了
+            </a>
+        </div>
+    </div>
+
+    {% if tasks %}
+    <div class="list-group">
+        {% for task in tasks %}
+        <div class="list-group-item">
+            <div class="d-flex w-100 justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <form method="post" action="{% url 'tasks:toggle' task.pk %}" class="me-3">
+                        {% csrf_token %}
+                        {% if task.status == 'done' %}
+                        <input type="hidden" name="status" value="todo">
+                        <button type="submit" class="btn btn-success btn-sm">
+                            <i class="bi bi-check-lg"></i>
+                        </button>
+                        {% else %}
+                        <input type="hidden" name="status" value="done">
+                        <button type="submit" class="btn btn-outline-secondary btn-sm">
+                            <i class="bi bi-circle"></i>
+                        </button>
+                        {% endif %}
+                    </form>
+                    <div>
+                        <a href="{% url 'tasks:detail' task.pk %}" class="text-decoration-none h5 mb-0 {% if task.status == 'done' %}text-muted text-decoration-line-through{% endif %}">
+                            {{ task.title }}
+                        </a>
+                        {% if task.due_at %}
+                        <small class="text-muted d-block">
+                            期限: {{ task.due_at|date:"n/j H:i" }}
+                            {% if task.is_overdue %}
+                            <span class="text-danger"><i class="bi bi-exclamation-circle"></i> 期限超過</span>
+                            {% endif %}
+                        </small>
+                        {% endif %}
+                        {% for tag in task.tags %}
+                        <span class="badge badge-tag me-1">{{ tag }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <span class="priority-{{ task.priority }}">
+                        {% if task.priority >= 3 %}<i class="bi bi-flag-fill"></i>{% else %}<i class="bi bi-flag"></i>{% endif %}
+                        {{ task.get_priority_display }}
+                    </span>
+                    <span class="badge status-{{ task.status }}">{{ task.get_status_display }}</span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        <i class="bi bi-info-circle"></i> タスクがありません。新しいタスクを作成してください。
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block title %}検索 - MemoScribe{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h1 class="mb-4">検索</h1>
+
+    <form method="get" class="mb-4">
+        <div class="input-group">
+            <input type="text" class="form-control form-control-lg" name="q" value="{{ query }}"
+                   placeholder="キーワードを入力...">
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-search"></i> 検索
+            </button>
+        </div>
+    </form>
+
+    {% if query %}
+    <p class="text-muted mb-4">「{{ query }}」の検索結果: {{ total_results }}件</p>
+
+    {% if results.notes %}
+    <div class="card mb-4">
+        <div class="card-header bg-white">
+            <h5 class="mb-0"><i class="bi bi-sticky text-warning"></i> メモ ({{ results.notes|length }}件)</h5>
+        </div>
+        <ul class="list-group list-group-flush">
+            {% for note in results.notes %}
+            <li class="list-group-item">
+                <a href="{% url 'notes:detail' note.pk %}" class="text-decoration-none fw-bold">
+                    {{ note.title }}
+                </a>
+                <p class="text-muted mb-0 small">{{ note.body|truncatewords:20 }}</p>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    {% if results.digests %}
+    <div class="card mb-4">
+        <div class="card-header bg-white">
+            <h5 class="mb-0"><i class="bi bi-calendar3 text-success"></i> ダイジェスト ({{ results.digests|length }}件)</h5>
+        </div>
+        <ul class="list-group list-group-flush">
+            {% for digest in results.digests %}
+            <li class="list-group-item">
+                <a href="{% url 'logs:detail' digest.log.pk %}" class="text-decoration-none fw-bold">
+                    {{ digest.log.date|date:"Y/n/j" }}のダイジェスト
+                </a>
+                <p class="text-muted mb-0 small">{{ digest.summary|truncatewords:20 }}</p>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    {% if results.documents %}
+    <div class="card mb-4">
+        <div class="card-header bg-white">
+            <h5 class="mb-0"><i class="bi bi-file-earmark-text text-primary"></i> 文書 ({{ results.documents|length }}件)</h5>
+        </div>
+        <ul class="list-group list-group-flush">
+            {% for doc in results.documents %}
+            <li class="list-group-item">
+                <a href="{% url 'documents:detail' doc.pk %}" class="text-decoration-none fw-bold">
+                    {{ doc.title }}
+                </a>
+                <p class="text-muted mb-0 small">{{ doc.extracted_text|truncatewords:20 }}</p>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    {% if results.tasks %}
+    <div class="card mb-4">
+        <div class="card-header bg-white">
+            <h5 class="mb-0"><i class="bi bi-check2-square text-info"></i> タスク ({{ results.tasks|length }}件)</h5>
+        </div>
+        <ul class="list-group list-group-flush">
+            {% for task in results.tasks %}
+            <li class="list-group-item">
+                <a href="{% url 'tasks:detail' task.pk %}" class="text-decoration-none fw-bold">
+                    {{ task.title }}
+                </a>
+                <span class="badge status-{{ task.status }} ms-2">{{ task.get_status_display }}</span>
+                {% if task.description %}
+                <p class="text-muted mb-0 small">{{ task.description|truncatewords:10 }}</p>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    {% if results.preferences %}
+    <div class="card mb-4">
+        <div class="card-header bg-white">
+            <h5 class="mb-0"><i class="bi bi-sliders text-secondary"></i> 好み・ルール ({{ results.preferences|length }}件)</h5>
+        </div>
+        <ul class="list-group list-group-flush">
+            {% for pref in results.preferences %}
+            <li class="list-group-item">
+                <strong>{{ pref.key }}</strong>
+                <p class="text-muted mb-0 small">{{ pref.value|truncatewords:10 }}</p>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    {% if total_results == 0 %}
+    <div class="alert alert-info">
+        <i class="bi bi-info-circle"></i> 検索結果が見つかりませんでした。別のキーワードで試してください。
+    </div>
+    {% endif %}
+
+    {% endif %}
+</div>
+{% endblock %}

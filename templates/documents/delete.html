@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}文書を削除 - MemoScribe{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="card border-danger">
+        <div class="card-header bg-danger text-white">
+            <h2 class="mb-0"><i class="bi bi-exclamation-triangle"></i> 文書を削除</h2>
+        </div>
+        <div class="card-body">
+            <p>以下の文書を削除しますか？関連するチャンクと埋め込みも削除されます。この操作は元に戻せません。</p>
+
+            <div class="alert alert-secondary">
+                <strong>{{ document.title }}</strong>
+                <p class="mb-0 text-muted">{{ document.file_type|upper }} - {{ document.created_at|date:"Y/n/j" }}</p>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash"></i> 削除する
+                    </button>
+                    <a href="{% url 'documents:detail' document.pk %}" class="btn btn-outline-secondary">キャンセル</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}好み・ルール - MemoScribe{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>好み・ルール</h1>
+        <a href="{% url 'preferences:create' %}" class="btn btn-primary">
+            <i class="bi bi-plus-lg"></i> 追加
+        </a>
+    </div>
+
+    <p class="text-muted mb-4">
+        ここで設定した好みやルールは、アシスタントの回答や文章生成に反映されます。
+    </p>
+
+    {% if grouped %}
+    {% for category, prefs in grouped.items %}
+    <div class="card mb-4">
+        <div class="card-header bg-white">
+            <h5 class="mb-0"><i class="bi bi-tag"></i> {{ category }}</h5>
+        </div>
+        <ul class="list-group list-group-flush">
+            {% for pref in prefs %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>{{ pref.key }}</strong>
+                    <p class="mb-0 text-muted">{{ pref.value }}</p>
+                </div>
+                <div>
+                    <a href="{% url 'preferences:edit' pref.pk %}" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-pencil"></i>
+                    </a>
+                    <a href="{% url 'preferences:delete' pref.pk %}" class="btn btn-outline-danger btn-sm">
+                        <i class="bi bi-trash"></i>
+                    </a>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="alert alert-info">
+        <i class="bi bi-info-circle"></i> 好み・ルールがありません。追加してアシスタントをカスタマイズしましょう。
+        <br><br>
+        <strong>例:</strong>
+        <ul class="mb-0">
+            <li>文章スタイル: 「丁寧でフォーマルな文体を好む」</li>
+            <li>生活習慣: 「朝型で6時に起床する」</li>
+            <li>意思決定: 「健康を最優先にする」</li>
+        </ul>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

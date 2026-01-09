@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+{% block title %}ダッシュボード - MemoScribe{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>ダッシュボード</h1>
+        <span class="text-muted">{{ today|date:"Y年n月j日" }}</span>
+    </div>
+
+    <div class="row">
+        <!-- Daily Suggestion -->
+        <div class="col-12 mb-4">
+            <div class="card bg-gradient" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <div class="card-body text-white">
+                    <h5 class="card-title"><i class="bi bi-lightbulb"></i> 今日の提案</h5>
+                    <p class="card-text mb-0">{{ daily_suggestion }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tasks -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="bi bi-check2-square text-primary"></i> タスク</h5>
+                    <a href="{% url 'tasks:create' %}" class="btn btn-sm btn-primary">
+                        <i class="bi bi-plus"></i> 追加
+                    </a>
+                </div>
+                <div class="card-body">
+                    {% if upcoming_tasks %}
+                    <ul class="list-group list-group-flush">
+                        {% for task in upcoming_tasks %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                            <div>
+                                <a href="{% url 'tasks:detail' task.pk %}" class="text-decoration-none">
+                                    {{ task.title }}
+                                </a>
+                                {% if task.due_at %}
+                                <small class="text-muted d-block">
+                                    期限: {{ task.due_at|date:"n/j H:i" }}
+                                    {% if task.is_overdue %}<span class="text-danger">(期限超過)</span>{% endif %}
+                                </small>
+                                {% endif %}
+                            </div>
+                            <span class="badge status-{{ task.status }}">{{ task.get_status_display }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p class="text-muted mb-0">タスクはありません</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Notes -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="bi bi-sticky text-warning"></i> 最近のメモ</h5>
+                    <a href="{% url 'notes:create' %}" class="btn btn-sm btn-primary">
+                        <i class="bi bi-plus"></i> 追加
+                    </a>
+                </div>
+                <div class="card-body">
+                    {% if recent_notes %}
+                    <ul class="list-group list-group-flush">
+                        {% for note in recent_notes %}
+                        <li class="list-group-item px-0">
+                            <a href="{% url 'notes:detail' note.pk %}" class="text-decoration-none">
+                                {{ note.title }}
+                            </a>
+                            <small class="text-muted d-block">{{ note.updated_at|date:"n/j H:i" }}</small>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p class="text-muted mb-0">メモはありません</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Logs -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="bi bi-calendar3 text-success"></i> 最近のログ</h5>
+                    <a href="{% url 'logs:create' %}" class="btn btn-sm btn-primary">
+                        <i class="bi bi-plus"></i> 追加
+                    </a>
+                </div>
+                <div class="card-body">
+                    {% if recent_logs %}
+                    <ul class="list-group list-group-flush">
+                        {% for log in recent_logs %}
+                        <li class="list-group-item px-0">
+                            <a href="{% url 'logs:detail' log.pk %}" class="text-decoration-none">
+                                {{ log.date|date:"Y/n/j" }}
+                            </a>
+                            {% if log.mood %}
+                            <span class="ms-2">{{ log.get_mood_display }}</span>
+                            {% endif %}
+                            <small class="text-muted d-block">{{ log.raw_text|truncatewords:10 }}</small>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p class="text-muted mb-0">ログはありません</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- LLM Usage -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0"><i class="bi bi-graph-up text-info"></i> 今日の利用状況</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-6">
+                            <h3 class="mb-0">{{ llm_calls_today }}</h3>
+                            <small class="text-muted">LLM呼び出し</small>
+                        </div>
+                        <div class="col-6">
+                            <h3 class="mb-0">{{ total_tokens_today|floatformat:0 }}</h3>
+                            <small class="text-muted">推定トークン</small>
+                        </div>
+                    </div>
+                    <hr>
+                    <p class="mb-0 text-center">
+                        {% if llm_available %}
+                        <span class="badge bg-success"><i class="bi bi-check-circle"></i> LLM有効</span>
+                        {% else %}
+                        <span class="badge bg-secondary"><i class="bi bi-x-circle"></i> LLM無効</span>
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0"><i class="bi bi-lightning"></i> クイックアクション</h5>
+                </div>
+                <div class="card-body">
+                    <div class="btn-group" role="group">
+                        <a href="{% url 'logs:create' %}" class="btn btn-outline-primary">
+                            <i class="bi bi-calendar-plus"></i> 今日のログ
+                        </a>
+                        <a href="{% url 'notes:create' %}" class="btn btn-outline-primary">
+                            <i class="bi bi-sticky"></i> メモ作成
+                        </a>
+                        <a href="{% url 'tasks:create' %}" class="btn btn-outline-primary">
+                            <i class="bi bi-plus-square"></i> タスク追加
+                        </a>
+                        <a href="{% url 'assistant:create' %}" class="btn btn-outline-primary">
+                            <i class="bi bi-chat-dots"></i> 相談する
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

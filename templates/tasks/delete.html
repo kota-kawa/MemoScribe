@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}タスクを削除 - MemoScribe{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="card border-danger">
+        <div class="card-header bg-danger text-white">
+            <h2 class="mb-0"><i class="bi bi-exclamation-triangle"></i> タスクを削除</h2>
+        </div>
+        <div class="card-body">
+            <p>以下のタスクを削除しますか？この操作は元に戻せません。</p>
+
+            <div class="alert alert-secondary">
+                <strong>{{ task.title }}</strong>
+                <p class="mb-0 text-muted">{{ task.description|truncatewords:20|default:"説明なし" }}</p>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash"></i> 削除する
+                    </button>
+                    <a href="{% url 'tasks:detail' task.pk %}" class="btn btn-outline-secondary">キャンセル</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

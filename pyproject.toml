@@ -1,0 +1,48 @@
+[project]
+name = "memoscribe"
+version = "0.1.0"
+description = "Personal Life Secretary - A Django-based personal assistant with RAG"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "django>=5.0",
+    "psycopg[binary]>=3.1",
+    "celery>=5.3",
+    "redis>=5.0",
+    "gunicorn>=21.2",
+    "whitenoise>=6.6",
+    "python-dotenv>=1.0",
+    "openai>=1.12",
+    "pdfminer.six>=20231228",
+    "tiktoken>=0.5",
+    "pgvector>=0.2",
+    "numpy>=1.26",
+    "markdown>=3.5",
+    "bleach>=6.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4",
+    "pytest-django>=4.7",
+    "pytest-cov>=4.1",
+    "ruff>=0.1",
+    "black>=23.12",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings"
+python_files = ["test_*.py", "*_test.py"]
+addopts = "-v --tb=short"
+
+[tool.black]
+line-length = 120
+target-version = ["py312"]

@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}設定 - MemoScribe{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h1 class="mb-4">設定</h1>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="card mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0"><i class="bi bi-shield-lock"></i> プライバシー設定</h5>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">LLMに送信するデータの種類を制御します。</p>
+
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="send_notes" name="send_notes"
+                           {% if settings.send_notes %}checked{% endif %}>
+                    <label class="form-check-label" for="send_notes">メモを送信</label>
+                </div>
+
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="send_digests" name="send_digests"
+                           {% if settings.send_digests %}checked{% endif %}>
+                    <label class="form-check-label" for="send_digests">ダイジェストを送信</label>
+                </div>
+
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="send_docs" name="send_docs"
+                           {% if settings.send_docs %}checked{% endif %}>
+                    <label class="form-check-label" for="send_docs">文書を送信</label>
+                    <small class="text-muted d-block">注意: 機密文書が含まれる可能性があります</small>
+                </div>
+
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="send_raw_logs" name="send_raw_logs"
+                           {% if settings.send_raw_logs %}checked{% endif %}>
+                    <label class="form-check-label" for="send_raw_logs">生ログを送信</label>
+                    <small class="text-muted d-block">注意: 個人情報が含まれる可能性があります</small>
+                </div>
+
+                <hr>
+
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="pii_masking" name="pii_masking"
+                           {% if settings.pii_masking %}checked{% endif %}>
+                    <label class="form-check-label" for="pii_masking">PIIマスキング</label>
+                    <small class="text-muted d-block">メール、電話番号、クレジットカード番号などをマスクします</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0"><i class="bi bi-cpu"></i> LLM設定</h5>
+            </div>
+            <div class="card-body">
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="llm_enabled" name="llm_enabled"
+                           {% if settings.llm_enabled %}checked{% endif %}>
+                    <label class="form-check-label" for="llm_enabled">LLM機能を有効化</label>
+                </div>
+
+                {% if not llm_configured %}
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    LLM APIキーが設定されていません。.envファイルでLLM_API_KEYを設定してください。
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card mb-4 border-danger">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0"><i class="bi bi-exclamation-triangle"></i> Danger Zone</h5>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">以下の操作は元に戻せません。</p>
+                <a href="{% url 'admin:index' %}" class="btn btn-outline-danger">
+                    <i class="bi bi-trash"></i> 管理画面でデータを削除
+                </a>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            <i class="bi bi-check-lg"></i> 設定を保存
+        </button>
+    </form>
+</div>
+{% endblock %}

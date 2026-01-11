@@ -31,7 +31,7 @@
     <div class="list-group">
         {% for task in tasks %}
         <div class="list-group-item">
-            <div class="d-flex w-100 justify-content-between align-items-center">
+            <div class="d-flex w-100 justify-content-between align-items-center task-item-row">
                 <div class="d-flex align-items-center">
                     <form method="post" action="{% url 'tasks:toggle' task.pk %}" class="me-3">
                         {% csrf_token %}

@@ -35,8 +35,14 @@
         {% endfor %}
     </div>
     {% else %}
-    <div class="alert alert-info">
-        <i class="bi bi-info-circle"></i> メモがありません。新しいメモを作成してください。
+    <div class="empty-state d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-3">
+        <div>
+            <h5 class="mb-1"><i class="bi bi-info-circle"></i> メモがありません</h5>
+            <p class="text-muted mb-0">最初のメモを作成して、気づきを残しましょう。</p>
+        </div>
+        <a href="{% url 'notes:create' %}" class="btn btn-primary">
+            <i class="bi bi-plus-lg"></i> メモを作成
+        </a>
     </div>
     {% endif %}
 </div>

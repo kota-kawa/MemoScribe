@@ -28,10 +28,10 @@
                     <p class="mb-0 text-muted">{{ pref.value }}</p>
                 </div>
                 <div>
-                    <a href="{% url 'preferences:edit' pref.pk %}" class="btn btn-outline-primary btn-sm">
+                    <a href="{% url 'preferences:edit' pref.pk %}" class="btn btn-outline-primary btn-sm" aria-label="好み・ルールを編集" title="編集">
                         <i class="bi bi-pencil"></i>
                     </a>
-                    <a href="{% url 'preferences:delete' pref.pk %}" class="btn btn-outline-danger btn-sm">
+                    <a href="{% url 'preferences:delete' pref.pk %}" class="btn btn-outline-danger btn-sm" aria-label="好み・ルールを削除" title="削除">
                         <i class="bi bi-trash"></i>
                     </a>
                 </div>
@@ -41,15 +41,17 @@
     </div>
     {% endfor %}
     {% else %}
-    <div class="alert alert-info">
-        <i class="bi bi-info-circle"></i> 好み・ルールがありません。追加してアシスタントをカスタマイズしましょう。
-        <br><br>
-        <strong>例:</strong>
-        <ul class="mb-0">
-            <li>文章スタイル: 「丁寧でフォーマルな文体を好む」</li>
-            <li>生活習慣: 「朝型で6時に起床する」</li>
-            <li>意思決定: 「健康を最優先にする」</li>
-        </ul>
+    <div class="empty-state d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-3">
+        <div>
+            <h5 class="mb-1"><i class="bi bi-info-circle"></i> 好み・ルールがありません</h5>
+            <p class="text-muted mb-2">追加してアシスタントをカスタマイズしましょう。</p>
+            <div class="small text-muted">
+                例: 「丁寧でフォーマルな文体を好む」「朝型で6時に起床する」
+            </div>
+        </div>
+        <a href="{% url 'preferences:create' %}" class="btn btn-primary">
+            <i class="bi bi-plus-lg"></i> 追加する
+        </a>
     </div>
     {% endif %}
 </div>

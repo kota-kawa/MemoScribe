@@ -6,6 +6,7 @@ import os
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.http import JsonResponse
 
 from documents.models import Document
 from documents.forms import DocumentForm
@@ -75,3 +76,17 @@ def document_delete(request, pk):
 
     context = {"document": document}
     return render(request, "documents/delete.html", context)
+
+
+@login_required
+def document_status(request):
+    """Return document processing status for polling."""
+    documents = Document.objects.filter(user=request.user)
+    ids_param = request.GET.get("ids", "").strip()
+    if ids_param:
+        ids = [int(item) for item in ids_param.split(",") if item.isdigit()]
+        if ids:
+            documents = documents.filter(id__in=ids)
+
+    data = list(documents.values("id", "status"))
+    return JsonResponse({"documents": data})

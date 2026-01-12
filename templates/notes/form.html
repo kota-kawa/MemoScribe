@@ -15,7 +15,7 @@
             <h2 class="mb-0">{% if is_edit %}メモを編集{% else %}新規メモ{% endif %}</h2>
         </div>
         <div class="card-body">
-            <form method="post">
+            <form method="post" class="js-draft-form" data-draft-key="notes:new" data-draft-enabled="{% if is_edit %}false{% else %}true{% endif %}">
                 {% csrf_token %}
 
                 <div class="mb-3">

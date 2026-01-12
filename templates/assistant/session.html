@@ -29,7 +29,7 @@
                         {% if not llm_available %}
                         <span class="badge bg-warning">LLM無効</span>
                         {% endif %}
-                        <a href="{% url 'assistant:delete' session.pk %}" class="btn btn-outline-danger btn-sm">
+                        <a href="{% url 'assistant:delete' session.pk %}" class="btn btn-outline-danger btn-sm" aria-label="会話を削除" title="削除">
                             <i class="bi bi-trash"></i>
                         </a>
                     </div>
@@ -81,10 +81,19 @@
                     <form method="post" action="{% url 'assistant:send' session.pk %}">
                         {% csrf_token %}
                         <div class="input-group">
-                            <input type="text" name="message" class="form-control" placeholder="質問を入力..." required>
+                            <input type="text" name="message" id="assistantMessage" class="form-control" placeholder="質問を入力..." required>
                             <button type="submit" class="btn btn-primary">
                                 <i class="bi bi-send"></i> 送信
                             </button>
+                        </div>
+                        <div class="mt-2">
+                            <div class="small text-muted mb-1">よくある相談例:</div>
+                            <div class="suggestion-chips">
+                                <button type="button" class="btn btn-sm btn-outline-secondary" data-fill-target="assistantMessage" data-fill-value="今日の予定を提案して">今日の予定を提案して</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" data-fill-target="assistantMessage" data-fill-value="最近のメモを3行でまとめて">最近のメモを3行でまとめて</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" data-fill-target="assistantMessage" data-fill-value="次にやるべきタスクを整理して">次にやるべきタスクを整理して</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" data-fill-target="assistantMessage" data-fill-value="丁寧なメール文にリライトして">丁寧なメール文にリライトして</button>
+                            </div>
                         </div>
                     </form>
                 </div>

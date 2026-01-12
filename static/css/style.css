@@ -10,6 +10,24 @@ body {
     background-color: #f8f9fa;
 }
 
+/* Skip Link */
+.skip-link {
+    position: absolute;
+    left: 16px;
+    top: -40px;
+    background: #0d6efd;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    z-index: 2000;
+    transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+    top: 16px;
+}
+
 /* Sidebar Styles */
 .sidebar {
     width: var(--sidebar-width);
@@ -39,6 +57,11 @@ body {
 .sidebar .nav-link.active {
     background: rgba(255,255,255,0.25);
     color: white;
+}
+
+.sidebar .nav-link:focus-visible {
+    outline: 2px solid rgba(255,255,255,0.9);
+    outline-offset: 2px;
 }
 
 .sidebar .nav-link i {
@@ -75,6 +98,30 @@ body {
     margin-bottom: 1rem;
 }
 
+.empty-state {
+    background: #f5f7ff;
+    border: 1px dashed #cfd7ff;
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.empty-state .btn {
+    white-space: nowrap;
+}
+
+.suggestion-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.draft-alert {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
 .btn-primary {
     background: var(--primary-color);
     border-color: var(--primary-color);
@@ -83,6 +130,15 @@ body {
 .btn-primary:hover {
     background-color: #4a569d;
     border-color: #4a569d;
+}
+
+.btn:focus-visible,
+.form-control:focus-visible,
+.form-select:focus-visible,
+.form-check-input:focus-visible,
+.list-group-item:focus-visible {
+    outline: 2px solid rgba(92, 107, 192, 0.6);
+    outline-offset: 2px;
 }
 
 .badge-tag {
@@ -182,6 +238,15 @@ body {
     transition: opacity 0.3s ease;
 }
 
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+    }
+}
+
 /* Responsive Styles */
 @media (max-width: 768px) {
     .sidebar {
@@ -217,6 +282,10 @@ body {
     /* カード内のパディングなどを微調整 */
     .card-body {
         padding: 1rem;
+    }
+
+    .quick-actions .btn {
+        flex: 1 1 calc(50% - 8px);
     }
     
     /* フォントサイズの調整 */

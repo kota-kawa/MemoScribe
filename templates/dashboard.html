@@ -8,6 +8,72 @@
         <span class="text-muted">{{ today|date:"Y年n月j日" }}</span>
     </div>
 
+    {% if show_onboarding %}
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                <div>
+                    <h4 class="mb-1"><i class="bi bi-compass"></i> はじめに</h4>
+                    <p class="text-muted mb-0">まずは3ステップで準備完了です。</p>
+                </div>
+                <a href="{% url 'settings' %}" class="btn btn-outline-primary">
+                    <i class="bi bi-gear"></i> 設定を確認
+                </a>
+            </div>
+            <div class="mt-3">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="small text-muted">進捗 {{ onboarding_done }}/{{ onboarding_total }}</span>
+                    <span class="small text-muted">{{ onboarding_percent }}%</span>
+                </div>
+                <div class="progress" style="height: 6px;">
+                    <div class="progress-bar" role="progressbar" style="width: {{ onboarding_percent }}%;"></div>
+                </div>
+            </div>
+            <div class="row mt-3 g-3">
+                <div class="col-md-4">
+                    <div class="p-3 border rounded h-100">
+                        <h6 class="mb-2">
+                            <i class="bi {% if has_log %}bi-check-circle-fill text-success{% else %}bi-circle text-muted{% endif %}"></i>
+                            今日のログを書く
+                        </h6>
+                        <p class="text-muted small mb-3">1日の出来事を短く書くだけでOK。</p>
+                        <a href="{% url 'logs:create' %}" class="btn btn-sm btn-primary">
+                            <i class="bi bi-plus"></i> ログを作成
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-3 border rounded h-100">
+                        <h6 class="mb-2">
+                            <i class="bi {% if has_note %}bi-check-circle-fill text-success{% else %}bi-circle text-muted{% endif %}"></i>
+                            メモを残す
+                        </h6>
+                        <p class="text-muted small mb-3">アイデアや気づきをメモに。</p>
+                        <a href="{% url 'notes:create' %}" class="btn btn-sm btn-primary">
+                            <i class="bi bi-plus"></i> メモを作成
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-3 border rounded h-100">
+                        <h6 class="mb-2">
+                            <i class="bi {% if has_document %}bi-check-circle-fill text-success{% else %}bi-circle text-muted{% endif %}"></i>
+                            文書をアップロード
+                        </h6>
+                        <p class="text-muted small mb-3">PDFやMarkdownを入れて検索対象に。</p>
+                        <a href="{% url 'documents:create' %}" class="btn btn-sm btn-primary">
+                            <i class="bi bi-upload"></i> アップロード
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3 text-muted small">
+                迷ったら <a href="{% url 'assistant:create' %}" class="text-decoration-none">アシスタント</a> で相談できます。
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
     <div class="row">
         <!-- Daily Suggestion -->
         <div class="col-12 mb-4">
@@ -152,17 +218,17 @@
                     <h5 class="mb-0"><i class="bi bi-lightning"></i> クイックアクション</h5>
                 </div>
                 <div class="card-body">
-                    <div class="btn-group" role="group">
-                        <a href="{% url 'logs:create' %}" class="btn btn-outline-primary">
+                    <div class="quick-actions d-flex flex-wrap gap-2" role="group">
+                        <a href="{% url 'logs:create' %}" class="btn btn-outline-primary flex-grow-1">
                             <i class="bi bi-calendar-plus"></i> 今日のログ
                         </a>
-                        <a href="{% url 'notes:create' %}" class="btn btn-outline-primary">
+                        <a href="{% url 'notes:create' %}" class="btn btn-outline-primary flex-grow-1">
                             <i class="bi bi-sticky"></i> メモ作成
                         </a>
-                        <a href="{% url 'tasks:create' %}" class="btn btn-outline-primary">
+                        <a href="{% url 'tasks:create' %}" class="btn btn-outline-primary flex-grow-1">
                             <i class="bi bi-plus-square"></i> タスク追加
                         </a>
-                        <a href="{% url 'assistant:create' %}" class="btn btn-outline-primary">
+                        <a href="{% url 'assistant:create' %}" class="btn btn-outline-primary flex-grow-1">
                             <i class="bi bi-chat-dots"></i> 相談する
                         </a>
                     </div>

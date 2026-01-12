@@ -11,12 +11,13 @@
     {% block extra_css %}{% endblock %}
 </head>
 <body>
+    <a class="skip-link" href="#mainContent">本文へスキップ</a>
     <!-- Mobile Header -->
-    <header class="mobile-header">
+    <header class="mobile-header" role="banner">
         <div class="brand-mobile">
             <i class="bi bi-journal-text me-2"></i> MemoScribe
         </div>
-        <button class="btn-toggle" id="sidebarToggle">
+        <button class="btn-toggle" id="sidebarToggle" aria-label="メニューを開閉" aria-controls="sidebar" aria-expanded="false">
             <i class="bi bi-list"></i>
         </button>
     </header>
@@ -24,7 +25,7 @@
     <!-- Overlay -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <nav class="sidebar d-flex flex-column" id="sidebar">
+    <nav class="sidebar d-flex flex-column" id="sidebar" aria-label="メインナビゲーション">
         <div class="brand">
             <i class="bi bi-journal-text"></i> MemoScribe
         </div>
@@ -92,9 +93,9 @@
         </ul>
     </nav>
 
-    <main class="main-content">
+    <main class="main-content" id="mainContent" role="main" tabindex="-1">
         {% if messages %}
-        <div class="container-fluid mb-3">
+        <div class="container-fluid mb-3" aria-live="polite" aria-atomic="true">
             {% for message in messages %}
             <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
                 {{ message }}

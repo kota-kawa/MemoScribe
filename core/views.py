@@ -37,6 +37,13 @@ def dashboard(request):
     # Recent logs
     recent_logs = DailyLog.objects.filter(user=request.user).order_by("-date")[:5]
 
+    has_note = Note.objects.filter(user=request.user).exists()
+    has_log = DailyLog.objects.filter(user=request.user).exists()
+    has_document = Document.objects.filter(user=request.user).exists()
+    onboarding_done = sum([has_log, has_note, has_document])
+    onboarding_total = 3
+    onboarding_percent = int(onboarding_done / onboarding_total * 100)
+
     # LLM usage stats
     llm_calls_today = AuditLog.objects.filter(
         user=request.user,
@@ -77,6 +84,13 @@ def dashboard(request):
         "llm_calls_today": llm_calls_today,
         "total_tokens_today": total_tokens_today,
         "llm_available": llm_provider.is_available(),
+        "show_onboarding": onboarding_done < onboarding_total,
+        "onboarding_done": onboarding_done,
+        "onboarding_total": onboarding_total,
+        "onboarding_percent": onboarding_percent,
+        "has_log": has_log,
+        "has_note": has_note,
+        "has_document": has_document,
     }
     return render(request, "dashboard.html", context)
 

@@ -1,3 +1,5 @@
+[English](README.en.md) | 日本語
+
 # MemoScribe - Personal Life Secretary
 
 自分専用の秘書（Personal Life Secretary）は、ユーザーが入力・アップロードしたあらゆる情報を安全に蓄積し、LLMとRAG（検索＋生成）で"根拠付き"の回答・文章作成・アドバイス・振り返りを提供する個人向けWebアプリです。

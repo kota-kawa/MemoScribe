@@ -18,6 +18,13 @@ from audits.models import AuditLog
 from core.llm import llm_provider
 
 
+def home(request):
+    """Public landing page view."""
+    if request.user.is_authenticated:
+        return redirect("dashboard")
+    return render(request, "landing.html")
+
+
 @login_required
 def dashboard(request):
     """Main dashboard view."""

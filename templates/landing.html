@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MemoScribe - Personal Life Secretary</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0ea5a4;
+            --primary-dark: #0f766e;
+            --accent: #f97316;
+            --ink: #0f172a;
+            --muted: #64748b;
+            --surface: #ffffff;
+            --surface-soft: #f8fafc;
+            --shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+            --font-body: "Manrope", "Noto Sans JP", sans-serif;
+            --font-display: "Space Grotesk", "Manrope", "Noto Sans JP", sans-serif;
+        }
+        body {
+            font-family: var(--font-body);
+            color: var(--ink);
+            background:
+                radial-gradient(1200px circle at 15% -10%, rgba(14, 165, 164, 0.18), transparent 55%),
+                radial-gradient(900px circle at 100% 10%, rgba(249, 115, 22, 0.12), transparent 55%),
+                #f8fafc;
+        }
+        h1, h2, h3, h4, h5 {
+            font-family: var(--font-display);
+            letter-spacing: -0.02em;
+        }
+        header {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .hero {
+            background: linear-gradient(120deg, #0f172a 0%, #0f766e 55%, #0ea5a4 100%);
+            color: #fff;
+            padding: 90px 0 70px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::after {
+            content: "";
+            position: absolute;
+            right: -140px;
+            top: -160px;
+            width: 360px;
+            height: 360px;
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 50%;
+        }
+        .hero::before {
+            content: "";
+            position: absolute;
+            left: -200px;
+            bottom: -200px;
+            width: 420px;
+            height: 420px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+        }
+        .hero-card {
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--ink);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+        }
+        .badge-soft {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            font-weight: 600;
+        }
+        .section-title {
+            font-weight: 700;
+        }
+        .feature-card {
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 18px;
+            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+            height: 100%;
+            background: var(--surface);
+        }
+        .feature-icon {
+            width: 52px;
+            height: 52px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 14px;
+            background: rgba(14, 165, 164, 0.12);
+            color: var(--primary-dark);
+            font-size: 1.5rem;
+        }
+        .cta-band {
+            background: var(--surface);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            padding: 28px;
+            height: 100%;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, #22d3ee 100%);
+            border: none;
+            font-weight: 600;
+            border-radius: 999px;
+            padding: 0.65rem 1.5rem;
+            box-shadow: 0 12px 28px rgba(14, 165, 164, 0.3);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .btn-primary::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -40%;
+            width: 40%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.25);
+            transform: skewX(-18deg);
+            transition: transform 0.4s ease;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, #38bdf8 100%);
+            box-shadow: 0 16px 32px rgba(14, 165, 164, 0.35);
+            transform: translateY(-1px);
+        }
+        .btn-primary:hover::after {
+            transform: translateX(180%) skewX(-18deg);
+        }
+        .btn-outline-light {
+            border-radius: 999px;
+            font-weight: 600;
+            border: 1.5px solid rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+        .btn-outline-light:hover {
+            background: rgba(255, 255, 255, 0.18);
+            color: #fff;
+            transform: translateY(-1px);
+        }
+        .btn-outline-primary {
+            border-radius: 999px;
+            border: 1.5px solid transparent;
+            background: linear-gradient(#ffffff, #ffffff) padding-box,
+                linear-gradient(135deg, var(--primary) 0%, #22d3ee 100%) border-box;
+            color: var(--primary-dark);
+            font-weight: 600;
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+        .btn-outline-primary:hover {
+            background: linear-gradient(rgba(14, 165, 164, 0.12), rgba(14, 165, 164, 0.08)) padding-box,
+                linear-gradient(135deg, var(--primary-dark) 0%, #38bdf8 100%) border-box;
+            color: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 12px 26px rgba(14, 165, 164, 0.18);
+        }
+        footer {
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="py-3 shadow-sm">
+        <div class="container d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-journal-text fs-3 text-primary"></i>
+                <span class="fw-bold fs-4">MemoScribe</span>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <a class="btn btn-outline-primary" href="/login/">ログイン</a>
+                <a class="btn btn-primary" href="/login/">登録して始める</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container position-relative">
+            <div class="row align-items-center gy-4">
+                <div class="col-lg-7">
+                    <span class="badge badge-soft mb-3">Personal Life Secretary</span>
+                    <h1 class="display-5 fw-bold">あなたの情報を、<br>根拠付きで活用できるパーソナル秘書へ。</h1>
+                    <p class="lead mt-3">メモ・日常ログ・文書・タスクを安全に蓄積し、LLMとRAGで振り返りや文章作成を支援します。</p>
+                    <div class="d-flex flex-wrap gap-2 mt-4">
+                        <a class="btn btn-primary btn-lg" href="/login/">ログイン / 登録</a>
+                        <a class="btn btn-outline-light btn-lg" href="#features">機能を見る</a>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="hero-card p-4">
+                        <h5 class="fw-bold mb-3">MemoScribeでできること</h5>
+                        <ul class="list-unstyled mb-0 text-muted">
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>根拠付きの回答・要約・リライト</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>日々のログからダイジェスト生成</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>文書検索と引用付きの質問回答</li>
+                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>タスクと優先度の整理</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5" id="features">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="section-title">主な機能</h2>
+                <p class="text-muted">日々の情報をまとめ、必要なときに迷わず引き出せます。</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-4">
+                    <div class="card feature-card p-4">
+                        <div class="feature-icon mb-3"><i class="bi bi-sticky"></i></div>
+                        <h5 class="fw-bold">メモ管理</h5>
+                        <p class="text-muted mb-0">Markdown対応。考えやアイデアを素早く記録。</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card feature-card p-4">
+                        <div class="feature-icon mb-3"><i class="bi bi-calendar3"></i></div>
+                        <h5 class="fw-bold">日常ログ</h5>
+                        <p class="text-muted mb-0">出来事を蓄積し、自動でダイジェスト化。</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card feature-card p-4">
+                        <div class="feature-icon mb-3"><i class="bi bi-file-earmark-text"></i></div>
+                        <h5 class="fw-bold">文書管理</h5>
+                        <p class="text-muted mb-0">PDF/テキストをアップロードして検索。</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card feature-card p-4">
+                        <div class="feature-icon mb-3"><i class="bi bi-check2-square"></i></div>
+                        <h5 class="fw-bold">タスク管理</h5>
+                        <p class="text-muted mb-0">期限・優先度でやることを整理。</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card feature-card p-4">
+                        <div class="feature-icon mb-3"><i class="bi bi-sliders"></i></div>
+                        <h5 class="fw-bold">好み・ルール</h5>
+                        <p class="text-muted mb-0">パーソナルな指針を保存・再利用。</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card feature-card p-4">
+                        <div class="feature-icon mb-3"><i class="bi bi-chat-dots"></i></div>
+                        <h5 class="fw-bold">アシスタント</h5>
+                        <p class="text-muted mb-0">蓄積データに基づいた根拠付き回答。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <div class="cta-band">
+                        <h3 class="fw-bold">プライバシー重視の設計</h3>
+                        <p class="text-muted mb-2">ローカル/セルフホストを前提に、外部送信を最小限に抑えます。</p>
+                        <ul class="text-muted mb-0">
+                            <li>LLMの送信範囲を細かく設定可能</li>
+                            <li>PIIマスキングをON/OFF</li>
+                            <li>LLM無効でも基本機能が動作</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="cta-band">
+                        <h3 class="fw-bold">始める準備はできましたか？</h3>
+                        <p class="text-muted">登録済みの方はログイン、初めての方はここから登録できます。</p>
+                        <div class="d-flex flex-wrap gap-2">
+                            <a class="btn btn-primary" href="/login/">ログイン / 登録</a>
+                            <a class="btn btn-outline-primary" href="#features">もう少し見る</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-4">
+        <div class="container d-flex flex-column flex-md-row align-items-center justify-content-between gap-2">
+            <span>MemoScribe &copy; 2026</span>
+            <span>あなたの情報を、あなたのペースで。</span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -5,6 +5,8 @@ Dashboard, settings, and search.
 
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.utils import timezone
 from django.db.models import Q
@@ -23,6 +25,24 @@ def home(request):
     if request.user.is_authenticated:
         return redirect("dashboard")
     return render(request, "landing.html")
+
+
+def signup(request):
+    """User registration view."""
+    if request.user.is_authenticated:
+        return redirect("dashboard")
+
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, "登録が完了しました。ようこそ！")
+            return redirect("dashboard")
+    else:
+        form = UserCreationForm()
+    
+    return render(request, "registration/signup.html", {"form": form})
 
 
 @login_required

@@ -182,8 +182,8 @@
                 <span class="fw-bold fs-4">MemoScribe</span>
             </div>
             <div class="d-flex align-items-center gap-2">
-                <a class="btn btn-outline-primary" href="/login/">ログイン</a>
-                <a class="btn btn-primary" href="/login/">登録して始める</a>
+                <a class="btn btn-outline-primary" href="{% url 'login' %}">ログイン</a>
+                <a class="btn btn-primary" href="{% url 'signup' %}">登録して始める</a>
             </div>
         </div>
     </header>
@@ -196,7 +196,7 @@
                     <h1 class="display-5 fw-bold">あなたの情報を、<br>根拠付きで活用できるパーソナル秘書へ。</h1>
                     <p class="lead mt-3">メモ・日常ログ・文書・タスクを安全に蓄積し、LLMとRAGで振り返りや文章作成を支援します。</p>
                     <div class="d-flex flex-wrap gap-2 mt-4">
-                        <a class="btn btn-primary btn-lg" href="/login/">ログイン / 登録</a>
+                        <a class="btn btn-primary btn-lg" href="{% url 'signup' %}">無料で始める</a>
                         <a class="btn btn-outline-light btn-lg" href="#features">機能を見る</a>
                     </div>
                 </div>
@@ -287,7 +287,7 @@
                         <h3 class="fw-bold">始める準備はできましたか？</h3>
                         <p class="text-muted">登録済みの方はログイン、初めての方はここから登録できます。</p>
                         <div class="d-flex flex-wrap gap-2">
-                            <a class="btn btn-primary" href="/login/">ログイン / 登録</a>
+                            <a class="btn btn-primary" href="{% url 'signup' %}">アカウント作成</a>
                             <a class="btn btn-outline-primary" href="#features">もう少し見る</a>
                         </div>
                     </div>

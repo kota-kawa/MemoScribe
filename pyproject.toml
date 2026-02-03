@@ -4,6 +4,10 @@ version = "0.1.0"
 description = "Personal Life Secretary - A Django-based personal assistant with RAG"
 readme = "README.md"
 requires-python = ">=3.12"
+authors = [
+    { name = "Kota Kawagoe" }
+]
+license = { text = "Apache-2.0" }
 dependencies = [
     "django>=5.0",
     "psycopg[binary]>=3.1",

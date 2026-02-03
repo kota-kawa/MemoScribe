@@ -340,7 +340,7 @@ MemoScribe/
 
 ## ライセンス
 
-MIT License
+Apache License 2.0
 
 ## 貢献
 
